@@ -1,0 +1,120 @@
+
+// 1. Datsource and Generator
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. Next-Auth Models (Required by PrismaAdapter)
+// These handle users, sessions, and linking social accounts.
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// 3. Your Application's Custom Models
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  // Custom fields for your app
+  stripeCustomerId String?       @unique @map("stripe_customer_id")
+  subscription     Subscription?
+  shortUrls        ShortUrl[]
+}
+
+model Plan {
+  id                   Int      @id @default(autoincrement())
+  name                 String   @unique // "free", "pro", "enterprise"
+  priceCents           Int      @map("price_cents")
+  monthlyLimitUrls     Int?     @map("monthly_limit_urls") // null means unlimited
+  monthlyLimitClicks   Int?     @map("monthly_limit_clicks") // null means unlimited
+  dataRetentionDays    Int?     @map("data_retention_days") // null means unlimited
+  customAlias          Boolean  @default(false)
+  qrCodes              Boolean  @default(false)
+  qrBranding           Boolean  @default(false)
+  apiAccess            Boolean  @default(false)
+  apiRequestsPerMonth  Int?     @map("api_requests_per_month")
+  prioritySupport      Boolean  @default(false)
+  teamCollabLimit      Int?     @map("team_collab_limit")
+  
+  subscriptions        Subscription[]
+}
+
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  planId               Int
+  status               String   // "active", "trialing", "past_due", "cancelled"
+  startDate            DateTime @default(now()) @map("start_date")
+  endDate              DateTime? @map("end_date")
+  stripeSubscriptionId String?  @unique @map("stripe_subscription_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id])
+}
+
+model ShortUrl {
+  id         String   @id @default(cuid())
+  shortCode  String   @unique @map("short_code")
+  targetUrl  String   @map("target_url")
+  title      String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  ownerId String @map("owner_id")
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  clicks Click[]
+}
+
+model Click {
+  id          String   @id @default(cuid())
+  clickedAt   DateTime @default(now()) @map("clicked_at")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  countryCode String?  @map("country_code")
+
+  shortUrlId String   @map("short_url_id")
+  shortUrl   ShortUrl @relation(fields: [shortUrlId], references: [id], onDelete: Cascade)
+}
