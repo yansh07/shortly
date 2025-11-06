@@ -4,6 +4,17 @@ import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    }
+  }
+}
+
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
@@ -28,12 +39,12 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    // async session({session, token}) {
-    //   if (session.user) {
-    //     session.user.id = token.id as string
-    //   }
-    //   return session
-    // }
+    async session({session, token}) {
+      if (session.user) {
+        session.user.id = token.id as string
+      }
+      return session
+    }
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: true,
