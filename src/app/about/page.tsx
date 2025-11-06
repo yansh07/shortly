@@ -173,7 +173,7 @@ export default function Page() {
                 Speed First
               </h3>
               <p className="text-slate-400">
-                Built on Redis and FastAPI for blazing-fast URL generation and
+                Built on Redis and Express.js for blazing-fast URL generation and
                 redirects. Your users won&apos;t even notice the hop.
               </p>
             </div>
@@ -235,7 +235,7 @@ export default function Page() {
                 <div className="w-16 h-16 bg-slate-800/50 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Zap className="w-8 h-8 text-purple-400" />
                 </div>
-                <p className="text-slate-300 font-medium">FastAPI</p>
+                <p className="text-slate-300 font-medium">Express.js</p>
                 <p className="text-slate-500 text-sm">Backend</p>
               </div>
               <div className="text-center">
