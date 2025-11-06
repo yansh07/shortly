@@ -56,7 +56,7 @@ function page() {
               Secure & Reliable
             </h3>
             <p className="text-slate-400">
-              Enterprise-grade security with Auth0 authentication and encrypted
+              Enterprise-grade security with NextAuth authentication and encrypted
               data storage.
             </p>
           </div>

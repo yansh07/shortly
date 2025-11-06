@@ -75,7 +75,7 @@ function page() {
           </li>
           <li>
             2. <span className="font-bold">Authentication Providers:</span>{" "}
-            Auth0 (for secure login)
+            NextAuth (for secure login)
           </li>
           <li>
             3. <span className="font-bold">Analytics Tools:</span> For

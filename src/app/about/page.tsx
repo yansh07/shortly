@@ -249,7 +249,7 @@ export default function Page() {
                 <div className="w-16 h-16 bg-slate-800/50 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Shield className="w-8 h-8 text-emerald-400" />
                 </div>
-                <p className="text-slate-300 font-medium">Auth0</p>
+                <p className="text-slate-300 font-medium">NextAuth</p>
                 <p className="text-slate-500 text-sm">Authentication</p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 // lib/api.ts
-// import { getAccessToken } from '@auth0/nextjs-auth0';
+// import { getAccessToken } from '@NextAuth/nextjs-NextAuth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

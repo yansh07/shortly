@@ -1,6 +1,6 @@
 // app/auth/page.tsx
 'use client';
-// import { useUser } from '@auth0/nextjs-auth0';
+// import { useUser } from '@NextAuth/nextjs-NextAuth';
 import React from 'react';
 import { signIn } from 'next-auth/react';
 import { Link2, Github, Chrome, Sparkles, Loader2 } from 'lucide-react';
