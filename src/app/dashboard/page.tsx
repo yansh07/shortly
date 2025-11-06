@@ -23,7 +23,7 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [newUrl, setNewUrl] = useState("");
   const [customAlias, setCustomAlias] = useState("");
-  const [copiedId, setCopiedId] = useState(null);
+  const [copiedId, setCopiedId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const user = {
